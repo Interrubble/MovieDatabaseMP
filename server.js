@@ -36,13 +36,10 @@ app.post('/api/add-movie', (req, res) =>
     })
 );
 
-app.put('/api/update-review', (req, res) =>
-    db.query('UPDATE reviews SET reviews = ? WHERE id = ?', [req.body.reviews, req.params.id], (err, result) => {
+app.get('/api/update-review', (req, res) =>
+    db.query('SELECT movies.movie_name AS move, reviews.reviews FROM reviews LEFT JOIN movies ON reviews.movie_id = movies.id ORDER BY movies.movie_name;', [req.body.reviews, req.params.id], (err, result) => {
         if (err) {
             console.log(err);
-            return;
-        } else if (!result.affectedRows) {
-            res.json({ message: "Movie not found" });
             return;
         }
         res.json(result)
